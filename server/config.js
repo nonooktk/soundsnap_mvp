@@ -27,9 +27,14 @@ export const config = {
     perPhotoSec: 2.0,    // 1枚あたりの表示秒数
     crossfadeSec: 0.5,   // 写真間クロスフェード秒数
     targetTotalSec: 10,  // 目標の合計尺（秒）。枚数に応じて perPhotoSec を自動調整
-    width: 1280,
-    height: 720,
-    fps: 30,
+    // 解像度・fps はエンコード負荷に直結する。非力なサーバ(Azure B1=1vCPU)でも
+    // 軽く生成できるよう 540p / 24fps に抑える（アルバム用途には十分）。
+    width: 960,
+    height: 540,
+    fps: 24,
+    // x264 エンコード速度プリセット。'veryfast' で品質を保ちつつ大幅高速化。
+    // （'ultrafast'〜'medium' で速度↔品質のトレードオフ）
+    preset: 'veryfast',
     // macOS 標準の日本語フォント。字幕焼き込みに使用。
     fontPath: '/System/Library/Fonts/ヒラギノ角ゴシック W6.ttc',
     // フォールバック候補（上が見つからない場合に順に試す）

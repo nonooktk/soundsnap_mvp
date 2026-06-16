@@ -148,10 +148,14 @@ export async function buildAlbum({ photoPaths, title, captions, outputPath }) {
     });
 
     // 出力オプション
+    // -preset で x264 のエンコード速度を上げる（非力なサーバでの生成時間を短縮）。
+    // -threads 0 で利用可能なCPUを全て使う。
     args.push(
       '-filter_complex', filterComplex,
       '-map', '[vout]',
       '-c:v', 'libx264',
+      '-preset', config.album.preset || 'veryfast',
+      '-threads', '0',
       '-pix_fmt', 'yuv420p',
       '-movflags', '+faststart',
       '-y',           // 既存ファイルを上書き許可

@@ -46,6 +46,7 @@ const state = {
   startedAt: 0,
   autoEndTimer: null,
   tickTimer: null,
+  sessionActive: false, // 撮影セッション進行中フラグ（endSession の多重実行防止）
 };
 
 // ---- 画面切替 ----
@@ -108,6 +109,7 @@ async function startSession() {
   state.shots = [];
   state.cooldown.reset();
   state.startedAt = Date.now();
+  state.sessionActive = true; // セッション開始
 
   els.preview.srcObject = state.stream;
   state.capture = new CanvasCapture(els.preview);
@@ -203,11 +205,17 @@ function stopStream() {
 // 撮影終了 → アルバム生成
 // =====================================================================
 async function endSession(reason) {
+  // 多重実行ガード: 手動終了と自動終了がほぼ同時に発火しても、
+  // 先に呼ばれた1回だけを処理する（後続の auto による上書きを防ぐ）。
+  if (!state.sessionActive) return;
+  state.sessionActive = false;
+
   clearTimers();
   if (state.stt) state.stt.stop();
   stopStream();
 
   show('processing');
+  // 自動終了（1分経過）のときだけ案内を出す。手動終了では何も出さない。
   els.processingSub.textContent =
     reason === 'auto' ? '（1分経過のため自動終了しました）' : '';
 
