@@ -1,0 +1,597 @@
+/* ==========================================================================
+   SoundSnap MVP — styles.css
+   やさしく親しみやすい、明るく大きめUI（将来は高齢者向けデバイスを想定）
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   CSS 変数・デザイントークン
+   -------------------------------------------------------------------------- */
+:root {
+  /* アクセントカラー（穏やかなオレンジ/アンバー系） */
+  --accent:        #F5A623;
+  --accent-dark:   #D4891C;
+  --accent-light:  #FDD99A;
+  --accent-bg:     #FFF8EC;
+
+  /* ニュートラル */
+  --bg:            #FAFAF8;
+  --surface:       #FFFFFF;
+  --border:        #E5E2DB;
+  --text-main:     #2C2A26;
+  --text-sub:      #7A7570;
+  --text-hint:     #B0ABA3;
+
+  /* 危険色 */
+  --danger:        #E05252;
+  --danger-dark:   #C43E3E;
+  --danger-light:  #FDEAEA;
+
+  /* タイポグラフィ */
+  --font:          "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP",
+                   system-ui, -apple-system, sans-serif;
+
+  /* 丸み・影 */
+  --radius-sm:     8px;
+  --radius-md:     16px;
+  --radius-lg:     24px;
+  --shadow-card:   0 2px 12px rgba(0, 0, 0, 0.08);
+  --shadow-toast:  0 4px 20px rgba(0, 0, 0, 0.18);
+
+  /* レイアウト */
+  --max-width:     900px;
+  --screen-pad:    24px;
+}
+
+
+/* --------------------------------------------------------------------------
+   リセット・ベース
+   -------------------------------------------------------------------------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 18px; /* 高齢者向けに少し大きめのベースサイズ */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text-main);
+  background: var(--bg);
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+
+/* --------------------------------------------------------------------------
+   レイアウト — #app（全画面共通コンテナ）
+   -------------------------------------------------------------------------- */
+#app {
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 0 var(--screen-pad);
+  flex: 1;
+  position: relative;
+}
+
+
+/* --------------------------------------------------------------------------
+   画面切り替え — .screen / .screen.active
+   -------------------------------------------------------------------------- */
+.screen {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 40px var(--screen-pad);
+  gap: 20px;
+  width: 100%;
+}
+
+.screen.active {
+  display: flex;
+}
+
+
+/* --------------------------------------------------------------------------
+   共通テキストスタイル
+   -------------------------------------------------------------------------- */
+.note {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  text-align: center;
+  line-height: 1.55;
+}
+
+
+/* --------------------------------------------------------------------------
+   ボタン共通 — .btn
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  line-height: 1;
+  transition: background 0.18s ease, color 0.18s ease,
+              transform 0.12s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  user-select: none;
+  white-space: nowrap;
+  min-height: 52px;
+}
+
+/* プライマリ（アクセント） */
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(245, 166, 35, 0.35);
+}
+
+.btn-primary:hover {
+  background: var(--accent-dark);
+  box-shadow: 0 4px 14px rgba(245, 166, 35, 0.45);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  background: var(--accent-dark);
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* 危険（赤系） */
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(224, 82, 82, 0.30);
+}
+
+.btn-danger:hover {
+  background: var(--danger-dark);
+  box-shadow: 0 4px 14px rgba(224, 82, 82, 0.40);
+  transform: translateY(-1px);
+}
+
+.btn-danger:active {
+  background: var(--danger-dark);
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* ゴースト（控えめ） */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-sub);
+  border: 2px solid var(--border);
+}
+
+.btn-ghost:hover {
+  background: var(--border);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.btn-ghost:active {
+  background: var(--border);
+  transform: translateY(0);
+}
+
+/* 特大 */
+.btn-lg {
+  padding: 20px 52px;
+  font-size: 1.25rem;
+  border-radius: var(--radius-lg);
+  min-height: 68px;
+}
+
+/* disabled 共通 */
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+
+/* ==========================================================================
+   1) ホーム画面 — #screen-home
+   ========================================================================== */
+
+/* ブランドロゴ */
+.brand {
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  text-align: center;
+  line-height: 1.1;
+}
+
+/* リードコピー */
+.lead {
+  font-size: 1.15rem;
+  color: var(--text-sub);
+  text-align: center;
+  max-width: 480px;
+}
+
+/* トリガーワードの表示枠 */
+.trigger-hint {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  text-align: center;
+  background: var(--accent-bg);
+  border: 1.5px solid var(--accent-light);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  max-width: 520px;
+  width: 100%;
+}
+
+/* トリガーワードリスト（JS が追記） */
+#trigger-list {
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+
+/* ==========================================================================
+   2) 撮影画面 — #screen-recording
+   ========================================================================== */
+
+/* ヘッダーバー（rec-badge / timer / stop ボタン 横並び） */
+.rec-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 720px;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+/* 撮影中バッジ */
+.rec-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--danger);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* 点滅する赤い点 */
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--danger);
+  animation: dot-blink 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+@keyframes dot-blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.15; }
+}
+
+/* タイマー（中央寄せ） */
+.timer {
+  flex: 1;
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-main);
+  letter-spacing: 0.04em;
+}
+
+/* 終了ボタンは右端へ */
+#btn-stop {
+  flex-shrink: 0;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  min-height: 44px;
+}
+
+
+/* --------------------------------------------------------------------------
+   動画プレビューラップ（16:9 維持）
+   -------------------------------------------------------------------------- */
+.video-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 16 / 9;
+  background: #1A1A1A;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+
+.video-wrap video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+}
+
+/* カメラプレビューは自撮り（鏡像）にする */
+#preview {
+  transform: scaleX(-1);
+}
+
+
+/* --------------------------------------------------------------------------
+   撮影フラッシュ演出 — .flash / .flash.on
+   -------------------------------------------------------------------------- */
+.flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: var(--radius-md);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* JS が .on を付与すると一瞬白く光る */
+.flash.on {
+  animation: flash-burst 0.45s ease-out forwards;
+}
+
+@keyframes flash-burst {
+  0%   { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+
+
+/* --------------------------------------------------------------------------
+   音声認識バー — .listen-bar
+   -------------------------------------------------------------------------- */
+.listen-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 720px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 10px 16px;
+}
+
+/* マイクアイコン */
+.mic {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+/* 認識テキスト（長文省略） */
+.heard {
+  flex: 1;
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0; /* flex 内での ellipsis 有効化 */
+}
+
+/* 撮影枚数バッジ */
+.shot-count {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border: 1.5px solid var(--accent-light);
+  border-radius: 100px;
+  padding: 3px 12px;
+  white-space: nowrap;
+}
+
+
+/* --------------------------------------------------------------------------
+   撮影済みサムネイル — .thumbs / figure.thumb
+   -------------------------------------------------------------------------- */
+.thumbs {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  max-width: 720px;
+  overflow-x: auto;
+  padding-bottom: 6px;  /* スクロールバー分のパディング */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+/* サムネイルカード */
+figure.thumb {
+  flex-shrink: 0;
+  width: 110px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin: 0;
+}
+
+figure.thumb img {
+  width: 110px;
+  height: 82px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-card);
+  display: block;
+}
+
+/* 合言葉ラベル（アクセントバッジ風） */
+figure.thumb figcaption {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-dark);
+  background: var(--accent-bg);
+  border: 1.5px solid var(--accent-light);
+  border-radius: 100px;
+  padding: 2px 8px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+/* ==========================================================================
+   3) 生成中画面 — #screen-processing
+   ========================================================================== */
+
+/* CSSスピナー */
+.spinner {
+  width: 56px;
+  height: 56px;
+  border: 5px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* 処理中テキスト */
+.processing-text {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  text-align: center;
+}
+
+
+/* ==========================================================================
+   4) プレビュー画面 — #screen-preview
+   ========================================================================== */
+
+/* アルバムタイトル */
+.album-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--text-main);
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* プレビュー操作ボタン群 */
+.preview-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+
+/* ==========================================================================
+   トースト通知 — #toast / .toast.show
+   ========================================================================== */
+.toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%) translateY(12px);
+  background: var(--text-main);
+  color: #fff;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 100px;
+  box-shadow: var(--shadow-toast);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+
+/* ==========================================================================
+   レスポンシブ — 画面幅 480px 以下
+   ========================================================================== */
+@media (max-width: 480px) {
+  html {
+    font-size: 16px;
+  }
+
+  :root {
+    --screen-pad: 16px;
+  }
+
+  .brand {
+    font-size: 2.2rem;
+  }
+
+  .btn-lg {
+    padding: 18px 36px;
+    font-size: 1.1rem;
+  }
+
+  .timer {
+    font-size: 1.3rem;
+  }
+
+  .album-title {
+    font-size: 1.4rem;
+  }
+
+  .preview-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .preview-actions .btn {
+    width: 100%;
+  }
+
+  figure.thumb {
+    width: 90px;
+  }
+
+  figure.thumb img {
+    width: 90px;
+    height: 68px;
+  }
+}

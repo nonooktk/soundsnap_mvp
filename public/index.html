@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoundSnap MVP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main id="app">
+
+    <!-- 1) ホーム画面 -->
+    <section id="screen-home" class="screen active">
+      <h1 class="brand">SoundSnap</h1>
+      <p class="lead">合言葉で、いい瞬間を自動でパチリ。</p>
+      <div class="trigger-hint">
+        反応する言葉：<span id="trigger-list"></span>
+      </div>
+      <button id="btn-start" class="btn btn-primary btn-lg">撮影開始</button>
+      <p id="home-note" class="note"></p>
+    </section>
+
+    <!-- 2) 撮影画面 -->
+    <section id="screen-recording" class="screen">
+      <div class="rec-header">
+        <span class="rec-badge"><span class="dot"></span> 撮影中</span>
+        <span id="timer" class="timer">01:00</span>
+        <button id="btn-stop" class="btn btn-danger">終了</button>
+      </div>
+      <div class="video-wrap">
+        <video id="preview" autoplay muted playsinline></video>
+        <div id="flash" class="flash"></div>
+      </div>
+      <div class="listen-bar">
+        <span class="mic">🎤</span>
+        <span id="heard" class="heard">（聞き取り中…）</span>
+        <span id="shot-count" class="shot-count">0枚</span>
+      </div>
+      <div id="thumbs" class="thumbs"></div>
+    </section>
+
+    <!-- 3) 生成中画面 -->
+    <section id="screen-processing" class="screen">
+      <div class="spinner"></div>
+      <p class="processing-text">アルバムを作成中…</p>
+      <p id="processing-sub" class="note"></p>
+    </section>
+
+    <!-- 4) プレビュー画面 -->
+    <section id="screen-preview" class="screen">
+      <h2 id="album-title" class="album-title">おもいでアルバム</h2>
+      <div class="video-wrap">
+        <video id="album-video" controls autoplay playsinline></video>
+      </div>
+      <div class="preview-actions">
+        <button id="btn-save" class="btn btn-primary">保存</button>
+        <button id="btn-discard" class="btn btn-ghost">やり直す</button>
+      </div>
+      <p id="preview-note" class="note"></p>
+    </section>
+
+  </main>
+
+  <div id="toast" class="toast"></div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

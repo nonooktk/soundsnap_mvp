@@ -1,0 +1,16 @@
+{
+  "name": "soundsnap-mvp",
+  "version": "0.1.0",
+  "description": "ビデオ通話中の音声トリガーで自動スナップショット → ムービーアルバム自動生成 MVP",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.73.0"
+  }
+}
